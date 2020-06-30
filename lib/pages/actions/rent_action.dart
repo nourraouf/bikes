@@ -52,9 +52,9 @@ class _rent_actionState extends State<rent_action> {
         Padding(
           padding: EdgeInsets.all(30),
           child: Center(
-              child: OutlineButton(
+              child: IconButton(
             // color: Colors.blue,
-            child: Text('Select time'),
+            icon: Icon(Icons.access_time),
             onPressed: isEnabled
                 ? () {
                     DateTime now = DateTime.now();
@@ -80,11 +80,9 @@ class _rent_actionState extends State<rent_action> {
         Padding(
           padding: EdgeInsets.all(15),
           child: Center(
-              child: OutlineButton(
+              child: IconButton(
             // color: Colors.blue,
-            child: Text(
-              'Select date',
-            ),
+            icon: Icon(Icons.calendar_today),
             onPressed: isEnabled
                 ? () {
                     showDatePicker(
@@ -114,14 +112,9 @@ class _rent_actionState extends State<rent_action> {
     idholder.clear();
   }
 
-  Widget _qrscanner() {
-    return Center(
-        child: OutlineButton(
-            // color: Colors.green,
-            child: Text('QR'),
-            onPressed: () async {
-              _qr = await scanner.scan();
-            }));
+  Future<String> _qrscanner() async {
+    String qr;
+    return qr = await scanner.scan();
   }
 
   Widget _switch() {
@@ -158,6 +151,7 @@ class _rent_actionState extends State<rent_action> {
 
   void _submit() {
     if (_formkey.currentState.validate()) {
+      _qrscanner();
       if (_switchVal == true) {
         _t = true;
         _d = true;
@@ -212,7 +206,6 @@ class _rent_actionState extends State<rent_action> {
                     _priceinput(),
                     _switch(),
                     _dataTime(),
-                    _qrscanner(),
                     _submitbtn(),
                   ],
                 ))),

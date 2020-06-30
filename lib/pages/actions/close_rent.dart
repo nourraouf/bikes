@@ -63,14 +63,9 @@ class _close_rentState extends State<close_rent> {
     );
   }
 
-  Widget _qrscanner() {
-    return Center(
-        child: OutlineButton(
-            // color: Colors.green,
-            child: Text('QR'),
-            onPressed: () async {
-              _qr = await scanner.scan();
-            }));
+  Future<String> _qrscanner() async {
+    String qr;
+    return qr = await scanner.scan();
   }
 
   Widget _submitbtn() {
@@ -89,6 +84,8 @@ class _close_rentState extends State<close_rent> {
 
   void _submit() {
     if (_formkey.currentState.validate()) {
+      _qrscanner();
+
       if (_qr != null) {
         _date = DateTime.now();
         _time = TimeOfDay.now();
@@ -116,7 +113,6 @@ class _close_rentState extends State<close_rent> {
                 child: Column(
                   children: <Widget>[
                     _textT(),
-                    _qrscanner(),
                     _idInput(),
                     _notes(),
                     _submitbtn(),

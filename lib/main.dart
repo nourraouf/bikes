@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:shiref_bike/add_types/add_user.dart';
 import 'package:shiref_bike/pages/actions.dart';
 import 'package:shiref_bike/pages/add.dart';
 import 'package:shiref_bike/pages/home.dart';
+import 'package:shiref_bike/pages/login.dart';
 import 'package:shiref_bike/pages/records.dart';
 import 'package:shiref_bike/pages/search.dart';
 import 'package:shiref_bike/widgets/shared.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    MaterialApp(
+      home: login(),
+      //home: add_user(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

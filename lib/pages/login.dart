@@ -1,0 +1,130 @@
+import 'package:flutter/material.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:shiref_bike/main.dart';
+import 'package:shiref_bike/pages/actions.dart';
+import 'package:shiref_bike/util/inherited.dart';
+
+class login extends StatefulWidget {
+  @override
+  _loginState createState() => _loginState();
+}
+
+class _loginState extends State<login> {
+  final _formkey = GlobalKey<FormState>();
+  String _userid, _passw;
+
+  Widget _textT() {
+    return Text(
+      'Login',
+      style: TextStyle(
+          color: Colors.grey[700], fontSize: 42, fontWeight: FontWeight.bold),
+    );
+  }
+
+  final idholder = TextEditingController();
+  final holder = TextEditingController();
+
+  Widget _idInput() {
+    return Padding(
+      padding: EdgeInsets.only(top: 20),
+      child: TextFormField(
+        controller: idholder,
+        onSaved: (val) => _userid = val,
+        keyboardType: TextInputType.number,
+        // validator: (val) => val.length != 14 ? 'Enter correct ID number' : null,
+        decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: 'UserId',
+            hintText: 'national id required',
+            icon: Icon(
+              Icons.face,
+              color: Colors.blue[700],
+            )),
+      ),
+    );
+  }
+
+  clearTextInput() {
+    holder.clear();
+    idholder.clear();
+  }
+
+  Widget _pass() {
+    return Padding(
+      padding: EdgeInsets.only(top: 20),
+      child: TextFormField(
+        obscureText: true,
+        controller: holder,
+        onSaved: (val) => _passw = val,
+        keyboardType: TextInputType.text,
+        decoration: InputDecoration(
+            suffixStyle: TextStyle(color: Colors.green),
+            border: OutlineInputBorder(),
+            labelText: 'Password',
+            icon: Icon(
+              Icons.lock,
+              color: Colors.grey[700],
+            )),
+      ),
+    );
+  }
+
+  void _submit() {
+    if (_formkey.currentState.validate()) {
+      _formkey.currentState.save();
+      print('id:$_userid CODE:$_passw ');
+      clearTextInput();
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (BuildContext context) {
+        return MyApp();
+      }));
+      // login = true;
+    } else {
+      print('not !');
+    }
+  }
+
+  Widget _sbtn() {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: RaisedButton(
+              color: Colors.blueAccent,
+              child: Text(
+                'Submit',
+              ),
+              onPressed: () {
+                _submit();
+              }),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: Center(
+            child: SingleChildScrollView(
+                child: Form(
+                    key: _formkey,
+                    child: Column(
+                      children: <Widget>[
+                        _textT(),
+                        _idInput(),
+                        _pass(),
+                        _sbtn(),
+                        // submitbtn(_formkey, holder, idholder),
+                      ],
+                    ))),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -25,6 +25,9 @@ dependencies:
     sdk: flutter
   qrscan: ^0.2.17
   http: ^0.12.0+2
+  image_picker:
+  camera:
+  path_provider:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
