@@ -2,8 +2,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
+
 import 'package:image_picker/image_picker.dart';
+import 'package:shiref_bike/pages/add.dart';
 import 'package:shiref_bike/widgets/shared.dart';
 
 import '../main.dart';
@@ -186,6 +187,7 @@ class _add_userState extends State<add_user> {
         body: Container(
           padding: EdgeInsets.symmetric(horizontal: 20.0),
           child: Padding(
+            padding: EdgeInsets.all(20),
             child: SingleChildScrollView(
                 child: Form(
                     key: _formkey,

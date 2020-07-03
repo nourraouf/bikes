@@ -6,12 +6,12 @@ import 'package:shiref_bike/pages/add.dart';
 
 import '../main.dart';
 
-class add_bike extends StatefulWidget {
+class add_product extends StatefulWidget {
   @override
-  _add_bikeState createState() => _add_bikeState();
+  _add_productState createState() => _add_productState();
 }
 
-class _add_bikeState extends State<add_bike> {
+class _add_productState extends State<add_product> {
   final _formkey = GlobalKey<FormState>();
   String _name_product, _descripto, _product_cost;
 
@@ -56,10 +56,10 @@ class _add_bikeState extends State<add_bike> {
         validator: (val) => val.length > 3 ? 'Enter correct ID number' : null,
         decoration: InputDecoration(
             border: OutlineInputBorder(),
-            labelText: 'Bike Model',
-            hintText: 'ex. cycle pro , trinx ',
+            labelText: 'Product Name',
+            hintText: 'Product name ',
             icon: Icon(
-              Icons.directions_bike,
+              Icons.receipt,
               color: Colors.grey[700],
             )),
       ),
@@ -81,29 +81,6 @@ class _add_bikeState extends State<add_bike> {
             border: OutlineInputBorder(),
             labelText: 'Product Cost',
             hintText: 'price will be displayed in site !  ',
-            icon: Icon(
-              Icons.attach_money,
-              color: Colors.grey[700],
-            )),
-      ),
-    );
-  }
-
-  Widget _rentprice() {
-    return Padding(
-      padding: EdgeInsets.only(top: 20),
-      child: TextFormField(
-        controller: priceholder,
-        onSaved: (val) => _product_cost = val,
-        keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-            enabled: !_isEnabled,
-            filled: _isEnabled,
-            suffixText: 'EGP',
-            suffixStyle: TextStyle(color: Colors.green),
-            border: OutlineInputBorder(),
-            labelText: 'Rent Cost',
-            hintText: 'Rent per month',
             icon: Icon(
               Icons.attach_money,
               color: Colors.grey[700],
@@ -161,27 +138,6 @@ class _add_bikeState extends State<add_bike> {
     );
   }
 
-  bool _switchVal = false;
-  bool _isEnabled = false;
-
-  Widget _switch() {
-    return Row(
-      children: [
-        Text('Rentable'),
-        Center(
-          child: Switch(
-              value: this._switchVal,
-              onChanged: (bool value) {
-                setState(() {
-                  this._switchVal = value;
-                  this._isEnabled = !this._isEnabled;
-                });
-              }),
-        )
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -206,10 +162,8 @@ class _add_bikeState extends State<add_bike> {
                   children: <Widget>[
                     _textT(),
                     _productname(),
-                    _switch(),
                     _camera(),
                     _priceinput(),
-                    _rentprice(),
                     _description(),
                     _submitbtn(),
                   ],

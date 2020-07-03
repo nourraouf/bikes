@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:shiref_bike/main.dart';
 import 'package:shiref_bike/pages/actions.dart';
+import 'package:shiref_bike/services/api.dart';
+import 'package:shiref_bike/services/api_service.dart';
 import 'package:shiref_bike/util/inherited.dart';
 
 class login extends StatefulWidget {
@@ -69,15 +71,23 @@ class _loginState extends State<login> {
     );
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (_formkey.currentState.validate()) {
       _formkey.currentState.save();
+      // final api = API(api_key: _userid, api_pass: _passw);
+      // final apiSer = apiService(api);
+      //final accesstoken = await apiSer.getAccesToken();
+
       print('id:$_userid CODE:$_passw ');
+
+      // if (accesstoken != null) {
       clearTextInput();
+
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (BuildContext context) {
         return MyApp();
       }));
+      // }
       // login = true;
     } else {
       print('not !');
