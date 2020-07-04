@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
-import 'package:shiref_bike/pages/add.dart';
+//import 'package:qrscan/qrscan.dart' as scanner;
+//import 'package:shiref_bike/pages/add.dart';
 
 import '../main.dart';
 

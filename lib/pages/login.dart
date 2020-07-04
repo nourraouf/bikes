@@ -14,6 +14,7 @@ class login extends StatefulWidget {
 class _loginState extends State<login> {
   final _formkey = GlobalKey<FormState>();
   String _userid, _passw;
+  bool _f = false;
 
   Widget _textT() {
     return Text(
@@ -32,12 +33,12 @@ class _loginState extends State<login> {
       child: TextFormField(
         controller: idholder,
         onSaved: (val) => _userid = val,
-        keyboardType: TextInputType.number,
+        // keyboardType: TextInputType.number,
         // validator: (val) => val.length != 14 ? 'Enter correct ID number' : null,
         decoration: InputDecoration(
             border: OutlineInputBorder(),
             labelText: 'UserId',
-            hintText: 'national id required',
+            hintText: 'requried',
             icon: Icon(
               Icons.face,
               color: Colors.blue[700],
@@ -74,19 +75,25 @@ class _loginState extends State<login> {
   Future<void> _submit() async {
     if (_formkey.currentState.validate()) {
       _formkey.currentState.save();
-      // final api = API(api_key: _userid, api_pass: _passw);
-      // final apiSer = apiService(api);
-      //final accesstoken = await apiSer.getAccesToken();
+      final api = API(api_key: _userid, api_pass: _passw);
+      final apiSer = apiService(api);
+      final accesstoken = await apiSer.getAccesToken();
 
-      print('id:$_userid CODE:$_passw ');
+      print('id:$_userid CODE:$_passw token :$accesstoken');
 
       // if (accesstoken != null) {
       clearTextInput();
+      if (accesstoken != null) {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (BuildContext context) {
+          return MyApp();
+        }));
+      } else {
+        setState(() {
+          this._f = true;
+        });
+      }
 
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (BuildContext context) {
-        return MyApp();
-      }));
       // }
       // login = true;
     } else {
@@ -112,6 +119,22 @@ class _loginState extends State<login> {
     );
   }
 
+  Widget fail(bool f) {
+    if (f == true) {
+      return Text(
+        'Login failed',
+        style: TextStyle(
+            color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold),
+      );
+    } else {
+      return Text(
+        '',
+        style: TextStyle(
+            color: Colors.grey[700], fontSize: 18, fontWeight: FontWeight.bold),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -129,6 +152,7 @@ class _loginState extends State<login> {
                         _idInput(),
                         _pass(),
                         _sbtn(),
+                        fail(_f)
                         // submitbtn(_formkey, holder, idholder),
                       ],
                     ))),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+//import 'dart:html';
 
 import 'package:shiref_bike/services/api.dart';
 import 'package:http/http.dart' as http;
@@ -9,13 +10,19 @@ class apiService {
   final API api;
 
   Future<String> getAccesToken() async {
-    final response = await http.post(api.tokenUri().toString(), // https://
-        headers: {
-          'Authorization': 'Basic ${api.api_key}'
-        }); // how to add password
+    print(api.api_key);
+    print(api.api_pass);
+    final response = await http.post(
+        'http://hassanharby2000.pythonanywhere.com/api-token-auth/', // https://
+        body: jsonEncode(<String, String>{
+          'username': api.api_key,
+          'password': api.api_pass
+        }),
+        headers: {"Content-Type": "application/json"});
+    // how to add password
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      final accessToken = data['access'];
+      final accessToken = data['token'];
       if (accessToken != null) {
         return accessToken;
       } else {

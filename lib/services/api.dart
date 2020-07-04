@@ -6,16 +6,16 @@ class API {
   final String api_key;
   final String api_pass;
 
-  static final String host = '';
-  static final int port = 443;
+  static final String host = 'http://hassanharby2000.pythonanywhere.com/';
+  // static final int port = 443;
 
   Uri tokenUri() {
     Uri(
-      scheme: 'https',
+      scheme: 'http',
       host: host,
-      port: port,
-      path: 'token',
-      queryParameters: {'grant_type': 'client_ceredentials'},
+      // port: port,
+      path: 'api-token-auth',
+      // queryParameters: {},
     );
   }
 }
