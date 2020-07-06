@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class sell_action extends StatefulWidget {
   @override
@@ -8,11 +10,8 @@ class sell_action extends StatefulWidget {
 
 class _sell_actionState extends State<sell_action> {
   final _formkey = GlobalKey<FormState>();
-  String _userid, _rentcost, _qr;
-  DateTime _date;
-  TimeOfDay _time;
+  String _userid, _sellcost, _note, _productName;
 
-  bool _t = false, _d = false, _q = false;
   Widget _textT() {
     return Text(
       'Sell',
@@ -50,7 +49,7 @@ class _sell_actionState extends State<sell_action> {
       padding: EdgeInsets.only(top: 20),
       child: TextFormField(
         controller: productholder,
-        onSaved: (val) => _userid = val,
+        onSaved: (val) => _productName = val,
         keyboardType: TextInputType.text,
         decoration: InputDecoration(
             border: OutlineInputBorder(),
@@ -70,6 +69,7 @@ class _sell_actionState extends State<sell_action> {
     return Padding(
       padding: EdgeInsets.only(top: 20),
       child: TextFormField(
+        onSaved: (newValue) => _note = newValue,
         controller: noteholder,
         decoration: InputDecoration(
           border: OutlineInputBorder(),
@@ -106,11 +106,9 @@ class _sell_actionState extends State<sell_action> {
     if (_formkey.currentState.validate()) {
       _formkey.currentState.save();
       clearTextInput();
-
-      print(
-          'id:$_userid , price :$_rentcost ,return Date: $_date ,return time: $_time ,CODE: $_qr ');
+      _upload();
     } else {
-      print('not !');
+      print('no !');
     }
   }
 
@@ -121,7 +119,7 @@ class _sell_actionState extends State<sell_action> {
       padding: EdgeInsets.only(top: 20),
       child: TextFormField(
         controller: priceholder,
-        onSaved: (val) => _rentcost = val,
+        onSaved: (val) => _sellcost = val,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
             suffixText: 'EGP',
@@ -135,6 +133,27 @@ class _sell_actionState extends State<sell_action> {
             )),
       ),
     );
+  }
+
+  void _upload() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? 0;
+    final admin = prefs.getString('name') ?? 0;
+
+    Dio dio = new Dio();
+    dio.options.headers["Authorization"] = "token $token";
+
+    dio
+        .post("http://hassanharby2000.pythonanywhere.com/", data: {
+          "userid": _userid,
+          "price": _sellcost,
+          "note": _note,
+          "name": _productName,
+          "dateTime": DateTime.now(),
+          "admin": admin
+        })
+        .then((response) => print(response))
+        .catchError((error) => print(error));
   }
 
   @override

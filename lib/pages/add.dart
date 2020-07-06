@@ -15,7 +15,8 @@ class add extends StatefulWidget {
 class _addState extends State<add> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return WillPopScope(
+      onWillPop: () async => false,
       child: Scaffold(
         appBar: appBar('Add'),
         body: ListView(
@@ -49,6 +50,13 @@ class _addState extends State<add> {
             RaisedButton(
                 color: Colors.blue,
                 child: Text('Add Bike'),
+                onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (BuildContext context) {
+                      return add_bike();
+                    }))),
+            RaisedButton(
+                color: Colors.blue,
+                child: Text('Add Event'),
                 onPressed: () => Navigator.of(context).push(
                         MaterialPageRoute(builder: (BuildContext context) {
                       return add_bike();

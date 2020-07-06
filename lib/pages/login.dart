@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiref_bike/main.dart';
 import 'package:shiref_bike/pages/actions.dart';
 import 'package:shiref_bike/services/api.dart';
 import 'package:shiref_bike/services/api_service.dart';
-import 'package:shiref_bike/util/inherited.dart';
 
 class login extends StatefulWidget {
   @override
@@ -84,6 +84,9 @@ class _loginState extends State<login> {
       // if (accesstoken != null) {
       clearTextInput();
       if (accesstoken != null) {
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setString('token', accesstoken);
+        prefs.setString('name', _userid);
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (BuildContext context) {
           return MyApp();

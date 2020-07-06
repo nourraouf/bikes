@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class rent_action extends StatefulWidget {
   @override
@@ -161,6 +163,7 @@ class _rent_actionState extends State<rent_action> {
         _formkey.currentState.save();
         print(
             'id:$_userid , price :$_rentcost ,return Date: $_date ,return time: $_time ,CODE: $_qr ');
+        _upload();
         clearTextInput();
       } else {
         print('bike,date and time must be selected !');
@@ -168,6 +171,29 @@ class _rent_actionState extends State<rent_action> {
     } else {
       print('not !');
     }
+  }
+
+  void _upload() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? 0;
+    final admin = prefs.getString('name') ?? 0;
+
+    Dio dio = new Dio();
+    dio.options.headers["Authorization"] = "token $token";
+
+    dio
+        .post("http://hassanharby2000.pythonanywhere.com/", data: {
+          "userid": _userid,
+          "price": _rentcost,
+          "open": _switchVal,
+          "date": _date,
+          "time": _time,
+          "QR": _qr,
+          "dateTime": DateTime.now(),
+          "admin": admin
+        })
+        .then((response) => print(response))
+        .catchError((error) => print(error));
   }
 
   Widget _priceinput() {

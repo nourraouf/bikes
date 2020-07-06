@@ -11,10 +11,10 @@ class API {
 
   Uri tokenUri() {
     Uri(
-      scheme: 'http',
+      // scheme: 'http',
       host: host,
       // port: port,
-      path: 'api-token-auth',
+      path: 'api-token-auth/',
       // queryParameters: {},
     );
   }

@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:qrscan/qrscan.dart' as scanner;
 //import 'package:shiref_bike/pages/add.dart';
 
@@ -101,15 +104,33 @@ class _add_serviceState extends State<add_service> {
     );
   }
 
-  void _submit() {
+  void _submit() async {
     if (_formkey.currentState.validate()) {
       _formkey.currentState.save();
       clearTextInput();
+      _upload();
 
       // print('id:$_service_name ');
     } else {
       print('not !');
     }
+  }
+
+  void _upload() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? 0;
+
+    Dio dio = new Dio();
+    dio.options.headers["Authorization"] = "token $token";
+
+    dio
+        .post("http://hassanharby2000.pythonanywhere.com/", data: {
+          "name": _name_service,
+          "price": _service_cost,
+          "description": _description
+        })
+        .then((response) => print(response))
+        .catchError((error) => print(error));
   }
 
   @override

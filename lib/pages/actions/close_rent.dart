@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class close_rent extends StatefulWidget {
   @override
@@ -8,7 +10,7 @@ class close_rent extends StatefulWidget {
 
 class _close_rentState extends State<close_rent> {
   final _formkey = GlobalKey<FormState>();
-  String _userid, note, _qr;
+  String _userid, _note, _qr;
   DateTime _date;
   TimeOfDay _time;
 
@@ -25,6 +27,7 @@ class _close_rentState extends State<close_rent> {
     return Padding(
       padding: EdgeInsets.only(top: 20),
       child: TextFormField(
+        onSaved: (newValue) => _note = newValue,
         controller: holder,
         decoration: InputDecoration(
           border: OutlineInputBorder(),
@@ -100,6 +103,26 @@ class _close_rentState extends State<close_rent> {
     } else {
       print('not !');
     }
+  }
+
+  void _upload() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? 0;
+    final admin = prefs.getString('name') ?? 0;
+
+    Dio dio = new Dio();
+    dio.options.headers["Authorization"] = "token $token";
+
+    dio
+        .post("http://hassanharby2000.pythonanywhere.com/", data: {
+          "userid": _userid,
+          "notes": _note,
+          "QR": _qr,
+          "dateTime": DateTime.now(),
+          "admin": admin
+        })
+        .then((response) => print(response))
+        .catchError((error) => print(error));
   }
 
   @override
