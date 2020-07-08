@@ -199,18 +199,16 @@ class _add_bikeState extends State<add_bike> {
     String fileName = file.path.split('/').last;
 
     FormData data = FormData.fromMap({
-      // "image": await MultipartFile.fromFile(
-      //file.path,
-
-      // ),
-
-      "admin": admin,
+      "image": await MultipartFile.fromFile(
+        file.path,
+        filename: fileName,
+      ),
 
       "model": _name_product,
       "serial": "000",
-      "image": "http://hassanharby2000.pythonanywhere.com/media/Untitled.png",
+      //"image": _image,
       "availability": true,
-      "rentability": _switchVal,
+      "rentability": true,
       "availabilityDuration": "00:00:02",
       "description": _descripto,
       "sellPrice": _product_cost,
@@ -221,11 +219,11 @@ class _add_bikeState extends State<add_bike> {
     });
 
     Dio dio = new Dio();
-    // dio.options.headers["Authorization"] = "token $token";
+    dio.options.headers["Authorization"] = "token $token";
     dio.options.headers["Content-Type"] = "application/json";
 
     dio
-        .post("http://hassanharby2000.pythonanywhere.com/Products/Bike/",
+        .post("http://nabilmokhtar.pythonanywhere.com/Products/Bike/",
             data: data)
         .then((response) => print(response))
         .catchError((error) => print(error));

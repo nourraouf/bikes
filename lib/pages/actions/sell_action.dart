@@ -144,14 +144,17 @@ class _sell_actionState extends State<sell_action> {
     dio.options.headers["Authorization"] = "token $token";
 
     dio
-        .post("http://hassanharby2000.pythonanywhere.com/", data: {
-          "userid": _userid,
-          "price": _sellcost,
-          "note": _note,
-          "name": _productName,
-          "dateTime": DateTime.now(),
-          "admin": admin
-        })
+        .post("http://nabilmokhtar.pythonanywhere.com/Records/SellARecord/",
+            data: {
+              "customer": _userid,
+              "price": _sellcost,
+              "notes": _note,
+              "name": _productName,
+              //"dateTime": DateTime.now(),
+              "accessorie": 2,
+              "dateTime": "nulll",
+              //"notes": "234ewdx",
+            })
         .then((response) => print(response))
         .catchError((error) => print(error));
   }

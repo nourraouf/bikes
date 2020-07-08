@@ -181,20 +181,23 @@ class _add_userState extends State<add_user> {
     String fileName = file.path.split('/').last;
 
     FormData data = FormData.fromMap({
-      "image": await MultipartFile.fromFile(
+      "idImage": await MultipartFile.fromFile(
         file.path,
         filename: fileName,
       ),
       "name": _name,
       "userid": _userid,
       "password": _passw,
+      "phone": 01060269224,
+      "adress": "sxtxjtcuexh",
     });
 
     Dio dio = new Dio();
     dio.options.headers["Authorization"] = "token $token";
+    dio.options.headers["Content-Type"] = "application/json";
 
     dio
-        .post("http://hassanharby2000.pythonanywhere.com/", data: data)
+        .post("http://nabilmokhtar.pythonanywhere.com/User/User/", data: data)
         .then((response) => print(response))
         .catchError((error) => print(error));
   }

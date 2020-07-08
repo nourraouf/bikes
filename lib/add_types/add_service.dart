@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -115,8 +116,8 @@ class _add_serviceState extends State<add_service> {
     if (_formkey.currentState.validate()) {
       _formkey.currentState.save();
       clearTextInput();
-      //addService();
-      _upload();
+      addService();
+      //_upload();
       // print('id:$_service_name ');
     } else {
       print('not !');
@@ -150,8 +151,11 @@ class _add_serviceState extends State<add_service> {
     final admin = prefs.getString('admin') ?? 0;
     print(token);
     final http.Response response = await http.post(
-      'http://hassanharby2000.pythonanywhere.com/Products/Service/',
-      headers: {"Content-Type": "application/json"},
+      'http://nabilmokhtar.pythonanywhere.com/Products/Service/',
+      headers: {
+        "Content-Type": "application/json",
+        HttpHeaders.authorizationHeader: "token $token"
+      },
       body: jsonEncode(<String, String>{
         "name": _name_service,
         "duration": "00:00:20",

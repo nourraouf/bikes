@@ -47,6 +47,7 @@ class _add_productState extends State<add_product> {
   clearTextInput() {
     idholder.clear();
     holder.clear();
+    priceholder.clear();
   }
 
   Widget _productname() {
@@ -56,7 +57,7 @@ class _add_productState extends State<add_product> {
         controller: idholder,
         onSaved: (val) => _name_product = val,
         // keyboardType: TextInputType.number,
-        validator: (val) => val.length > 3 ? 'Enter correct ID number' : null,
+        //  validator: (val) => val.length > 3 ? 'Enter correct ID number' : null,
         decoration: InputDecoration(
             border: OutlineInputBorder(),
             labelText: 'Product Name',
@@ -157,14 +158,18 @@ class _add_productState extends State<add_product> {
       ),
       "name": _name_product,
       "description": _descripto,
-      "sellprice": _product_cost,
+      "sellPrice": _product_cost,
+      "availability": true,
+      "branche": 1,
     });
 
     Dio dio = new Dio();
     dio.options.headers["Authorization"] = "token $token";
+    dio.options.headers["Content-Type"] = "application/json";
 
     dio
-        .post("http://hassanharby2000.pythonanywhere.com/", data: data)
+        .post("http://nabilmokhtar.pythonanywhere.com/Products/Accessories/",
+            data: data)
         .then((response) => print(response))
         .catchError((error) => print(error));
   }
