@@ -1,7 +1,13 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiref_bike/services/api.dart';
+import 'package:shiref_bike/services/api_service.dart';
+import 'package:http/http.dart' as http;
+
 //import 'package:qrscan/qrscan.dart' as scanner;
 //import 'package:shiref_bike/pages/add.dart';
 
@@ -45,6 +51,7 @@ class _add_serviceState extends State<add_service> {
   clearTextInput() {
     idholder.clear();
     holder.clear();
+    priceholder.clear();
   }
 
   Widget _nameservice() {
@@ -53,8 +60,8 @@ class _add_serviceState extends State<add_service> {
       child: TextFormField(
         controller: idholder,
         onSaved: (val) => _name_service = val,
-        keyboardType: TextInputType.number,
-        validator: (val) => val.length > 3 ? 'Enter correct ID number' : null,
+        // keyboardType: TextInputType.number,
+
         decoration: InputDecoration(
             border: OutlineInputBorder(),
             labelText: 'Service Name',
@@ -108,8 +115,8 @@ class _add_serviceState extends State<add_service> {
     if (_formkey.currentState.validate()) {
       _formkey.currentState.save();
       clearTextInput();
+      //addService();
       _upload();
-
       // print('id:$_service_name ');
     } else {
       print('not !');
@@ -119,18 +126,47 @@ class _add_serviceState extends State<add_service> {
   void _upload() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? 0;
-
+    Duration du = Duration(hours: 20);
     Dio dio = new Dio();
-    dio.options.headers["Authorization"] = "token $token";
+    dio.options.headers["Content-Type"] = "application/json";
 
     dio
-        .post("http://hassanharby2000.pythonanywhere.com/", data: {
-          "name": _name_service,
-          "price": _service_cost,
-          "description": _description
-        })
+        .post("http://hassanharby2000.pythonanywhere.com/Products/Service/",
+            data: {
+              "name": _name_service,
+              "duration": "00:00:20",
+              "price": _service_cost,
+            })
         .then((response) => print(response))
         .catchError((error) => print(error));
+  }
+
+  Future<String> addService() async {
+    final prefs = await SharedPreferences.getInstance();
+    Duration du = Duration(hours: 20);
+    int x = 20;
+
+    final token = prefs.getString('token') ?? 0;
+    final admin = prefs.getString('admin') ?? 0;
+    print(token);
+    final http.Response response = await http.post(
+      'http://hassanharby2000.pythonanywhere.com/Products/Service/',
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(<String, String>{
+        "name": _name_service,
+        "duration": "00:00:20",
+        "price": _service_cost,
+        // "description": _descripto,
+        //"admin": "nabil"
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      print(response.statusCode);
+    } else {
+      //throw Exception('Failed to create bike');
+      print(response.statusCode);
+    }
   }
 
   @override

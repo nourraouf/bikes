@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiref_bike/pages/add.dart';
+import 'package:http/http.dart' as http;
 
 import '../main.dart';
 
@@ -43,10 +44,14 @@ class _add_bikeState extends State<add_bike> {
 
   final idholder = TextEditingController();
   final holder = TextEditingController();
+  final rentholder = TextEditingController();
+  final priceholder = TextEditingController();
 
   clearTextInput() {
     idholder.clear();
     holder.clear();
+    rentholder.clear();
+    priceholder.clear();
   }
 
   Widget _productname() {
@@ -56,7 +61,7 @@ class _add_bikeState extends State<add_bike> {
         controller: idholder,
         onSaved: (val) => _name_product = val,
         // keyboardType: TextInputType.number,
-        validator: (val) => val.length > 3 ? 'Enter correct ID number' : null,
+        // validator: (val) => val.length > 3 ? 'Enter correct ID number' : null,
         decoration: InputDecoration(
             border: OutlineInputBorder(),
             labelText: 'Bike Model',
@@ -68,8 +73,6 @@ class _add_bikeState extends State<add_bike> {
       ),
     );
   }
-
-  final priceholder = TextEditingController();
 
   Widget _priceinput() {
     return Padding(
@@ -96,7 +99,7 @@ class _add_bikeState extends State<add_bike> {
     return Padding(
       padding: EdgeInsets.only(top: 20),
       child: TextFormField(
-        controller: priceholder,
+        controller: rentholder,
         onSaved: (val) => _rent_cost = val,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
@@ -191,29 +194,56 @@ class _add_bikeState extends State<add_bike> {
     final prefs = await SharedPreferences.getInstance();
 
     final token = prefs.getString('token') ?? 0;
-
+    final admin = prefs.getString('admin') ?? 0;
+    print(admin);
     String fileName = file.path.split('/').last;
 
     FormData data = FormData.fromMap({
-      "image": await MultipartFile.fromFile(
-        file.path,
-        filename: fileName,
-      ),
-      "name": _name_product,
+      // "image": await MultipartFile.fromFile(
+      //file.path,
+
+      // ),
+
+      "admin": admin,
+
+      "model": _name_product,
+      "serial": "000",
+      "image": "http://hassanharby2000.pythonanywhere.com/media/Untitled.png",
+      "availability": true,
+      "rentability": _switchVal,
+      "availabilityDuration": "00:00:02",
       "description": _descripto,
-      "sellprice": _product_cost,
-      "rentprice": _rent_cost,
-      "rentability": _isEnabled
+      "sellPrice": _product_cost,
+      "rentPerDay": 1,
+      "rentPerWeek": 1,
+      "rentPerMonth": _rent_cost,
+      "branche": 1,
     });
 
     Dio dio = new Dio();
-    dio.options.headers["Authorization"] = "token $token";
+    // dio.options.headers["Authorization"] = "token $token";
+    dio.options.headers["Content-Type"] = "application/json";
 
     dio
-        .post("http://hassanharby2000.pythonanywhere.com/", data: data)
+        .post("http://hassanharby2000.pythonanywhere.com/Products/Bike/",
+            data: data)
         .then((response) => print(response))
         .catchError((error) => print(error));
   }
+/* 
+  uploadFile() async {
+    var postUri =
+        Uri.parse("http://hassanharby2000.pythonanywhere.com/Products/Bike/");
+    var request = new http.MultipartRequest("POST", postUri);
+    request.fields['user'] = 'blah';
+    request.files.add(new http.MultipartFile.fromBytes(
+        'file', await File.fromUri(_image.path).readAsBytes(),
+        contentType: new MediaType('image', 'jpeg')));
+
+    request.send().then((response) {
+      if (response.statusCode == 200) print("Uploaded!");
+    });
+  } */
 
   @override
   Widget build(BuildContext context) {
