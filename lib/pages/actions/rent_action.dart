@@ -114,9 +114,9 @@ class _rent_actionState extends State<rent_action> {
     idholder.clear();
   }
 
-  Future<String> _qrscanner() async {
-    String qr;
-    return qr = await scanner.scan();
+  void _qrscanner() async {
+    _qr = await scanner.scan();
+    _submit();
   }
 
   Widget _switch() {
@@ -145,15 +145,16 @@ class _rent_actionState extends State<rent_action> {
           'Submit',
         ),
         onPressed: () {
-          _submit();
+          _qrscanner();
         },
       ),
     );
   }
 
-  void _submit() {
+  void _submit() async {
     if (_formkey.currentState.validate()) {
-      _qrscanner();
+      // Future<String> x = _qrscanner();
+
       if (_switchVal == true) {
         _t = true;
         _d = true;
@@ -179,17 +180,18 @@ class _rent_actionState extends State<rent_action> {
     final admin = prefs.getString('name') ?? 0;
 
     Dio dio = new Dio();
-    dio.options.headers["Authorization"] = "token $token";
 
+    dio.options.headers["Authorization"] = "token $token";
+    dio.options.headers["Content-Type"] = "application/json";
     dio
-        .post("http://hassanharby2000.pythonanywhere.com/", data: {
+        .post("http://nabilmokhtar.pythonanywhere.com/", data: {
           "userid": _userid,
           "price": _rentcost,
           "open": _switchVal,
           "date": _date,
           "time": _time,
           "QR": _qr,
-          "dateTime": DateTime.now(),
+          "dateTime": "null",
           "admin": admin
         })
         .then((response) => print(response))

@@ -29,7 +29,6 @@ class _sell_actionState extends State<sell_action> {
         controller: idholder,
         onSaved: (val) => _userid = val,
         keyboardType: TextInputType.number,
-        validator: (val) => val.length != 14 ? 'Enter correct ID number' : null,
         decoration: InputDecoration(
             border: OutlineInputBorder(),
             labelText: 'UserId',
@@ -141,19 +140,19 @@ class _sell_actionState extends State<sell_action> {
     final admin = prefs.getString('name') ?? 0;
 
     Dio dio = new Dio();
-    dio.options.headers["Authorization"] = "token $token";
+    // dio.options.headers["Authorization"] = "token $token";
 
+    dio.options.headers["Authorization"] = "token $token";
+    dio.options.headers["Content-Type"] = "application/json";
+//('id', 'notes', 'url')
     dio
         .post("http://nabilmokhtar.pythonanywhere.com/Records/SellARecord/",
             data: {
               "customer": _userid,
               "price": _sellcost,
               "notes": _note,
-              "name": _productName,
-              //"dateTime": DateTime.now(),
-              "accessorie": 2,
-              "dateTime": "nulll",
-              //"notes": "234ewdx",
+              "accessories": _productName,
+              "dateTime": "null",
             })
         .then((response) => print(response))
         .catchError((error) => print(error));

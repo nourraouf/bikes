@@ -13,18 +13,20 @@ class apiService {
     print(api.api_key);
     print(api.api_pass);
     final response = await http.post(
-        'http://hassanharby2000.pythonanywhere.com/api-token-auth/', // https://
+        'http://nabilmokhtar.pythonanywhere.com/api-token-auth/', // https://
         //  api.tokenUri().toString(),
         body: jsonEncode(<String, String>{
           'username': api.api_key,
           'password': api.api_pass
         }),
         headers: {"Content-Type": "application/json"});
-    // how to add password
+
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       final accessToken = data['token'];
+      print(accessToken);
       if (accessToken != null) {
+        print(accessToken);
         return accessToken;
       } else {
         print('response status !=200');

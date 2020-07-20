@@ -21,6 +21,7 @@ class _add_userState extends State<add_user> {
   String _userid, _rentcost, _qr, _name, _passw;
   DateTime _date;
   TimeOfDay _time;
+  String _phonenum;
 
   bool _t = false, _d = false, _q = false;
   Widget _textT() {
@@ -75,21 +76,7 @@ class _add_userState extends State<add_user> {
   }
 
   final noteholder = TextEditingController();
-
-  Widget _notes() {
-    return Padding(
-      padding: EdgeInsets.only(top: 20),
-      child: TextFormField(
-        controller: noteholder,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'notes',
-          hintText: 'descripe issue or discout status ',
-        ),
-        maxLines: 2,
-      ),
-    );
-  }
+  final phoneholder = TextEditingController();
 
   File _image;
 
@@ -110,7 +97,7 @@ class _add_userState extends State<add_user> {
       child: RaisedButton(
         color: Colors.blueAccent,
         child: Text(
-          'Sell',
+          'Add',
         ),
         onPressed: () {
           _submit();
@@ -124,6 +111,7 @@ class _add_userState extends State<add_user> {
     productholder.clear();
     holder.clear();
     noteholder.clear();
+    phoneholder.clear();
   }
 
   void _submit() {
@@ -160,6 +148,26 @@ class _add_userState extends State<add_user> {
     );
   }
 
+  Widget _phone() {
+    return Padding(
+      padding: EdgeInsets.only(top: 20),
+      child: TextFormField(
+        obscureText: true,
+        controller: phoneholder,
+        onSaved: (val) => _phonenum = val,
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+            suffixStyle: TextStyle(color: Colors.green),
+            border: OutlineInputBorder(),
+            labelText: 'Phone',
+            icon: Icon(
+              Icons.phone,
+              color: Colors.grey[700],
+            )),
+      ),
+    );
+  }
+
   Future getImage() async {
     // ignore: deprecated_member_use
     var image = await ImagePicker.pickImage(
@@ -188,8 +196,8 @@ class _add_userState extends State<add_user> {
       "name": _name,
       "userid": _userid,
       "password": _passw,
-      "phone": 01060269224,
-      "adress": "sxtxjtcuexh",
+      "phone": _phonenum,
+      "adress": "nulllll on id !",
     });
 
     Dio dio = new Dio();
@@ -232,7 +240,7 @@ class _add_userState extends State<add_user> {
                         _username(),
                         _pass(),
                         _camera(),
-                        //_notes(),
+                        _phone(),
                         _submitbtn(),
                       ],
                     ))),

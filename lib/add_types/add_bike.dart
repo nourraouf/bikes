@@ -203,10 +203,8 @@ class _add_bikeState extends State<add_bike> {
         file.path,
         filename: fileName,
       ),
-
       "model": _name_product,
       "serial": "000",
-      //"image": _image,
       "availability": true,
       "rentability": true,
       "availabilityDuration": "00:00:02",
